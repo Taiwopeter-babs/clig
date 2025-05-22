@@ -4,12 +4,10 @@ Copyright © 2025 Taiwo Babalola
 package cmd
 
 import (
-	"log"
 	"os"
 
+	"github.com/Taiwopeter-babs/clig/todo"
 	"github.com/spf13/cobra"
-
-	"github.com/mitchellh/go-homedir"
 )
 
 var datafile string
@@ -38,15 +36,11 @@ func init() {
 	// Here you will define your flags and configuration settings.
 	// Cobra supports persistent flags, which, if defined here,
 	// will be global for your application.
-	home, err := homedir.Dir()
-	if err != nil {
-		log.Println("Unable to detect home directory. Please set datafile using --datafile")
-	}
 
 	rootCmd.PersistentFlags().StringVar(
 		&datafile,
 		"datafile",
-		home+string(os.PathSeparator)+".clig-todos.json",
+		*todo.AllConstants.Filename,
 		"datafile to store todos",
 	)
 

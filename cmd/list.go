@@ -6,34 +6,61 @@ package cmd
 import (
 	"fmt"
 	"log"
+	"os"
+	"sort"
+	"text/tabwriter"
 
 	"github.com/Taiwopeter-babs/clig/todo"
 	"github.com/spf13/cobra"
 )
 
 // listCmd represents the list command
-var listCmd = &cobra.Command{
-	Use:   "list",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
+var (
+	listCmd = &cobra.Command{
+		Use:   "list",
+		Short: "A brief description of your command",
+		Long: `A longer description that spans multiple lines and likely contains examples
 and usage of using your command. For example:
 
 Cobra is a CLI library for Go that empowers applications.
 This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
-	Run: func(cmd *cobra.Command, args []string) {
-		items, err := todo.ReadItems(todo.Filename)
+		Run: listRun,
+	}
 
-		if err != nil {
-			log.Fatal(err)
+	doneOpt, allOpt bool
+)
+
+func listRun(cmd *cobra.Command, args []string) {
+	items, err := todo.ReadItems(datafile)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	sort.Sort(todo.ByPriority(items))
+
+	// fmt.Println(items)
+
+	writer := tabwriter.NewWriter(os.Stdout, 3, 0, 1, ' ', 0)
+
+	// fmt.Println(doneOpt, allOpt)
+
+	for _, item := range items {
+		if allOpt || item.Done == doneOpt {
+			fmt.Fprintln(writer, item.Label()+"\t"+item.PrettyDone()+"\t"+item.PrettyP()+"\t"+item.Text+"\t")
 		}
+	}
 
-		fmt.Println(items)
-	},
+	writer.Flush()
 }
 
 func init() {
 	rootCmd.AddCommand(listCmd)
+
+	listCmd.Flags().BoolVar(&doneOpt, "done", false, "Show 'Done' Todos")
+
+	listCmd.Flags().BoolVar(&allOpt, "all", false, "Show All Todos")
 
 	// Here you will define your flags and configuration settings.
 
