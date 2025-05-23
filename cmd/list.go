@@ -12,6 +12,7 @@ import (
 
 	"github.com/Taiwopeter-babs/clig/todo"
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 )
 
 // listCmd represents the list command
@@ -32,7 +33,9 @@ to quickly create a Cobra application.`,
 )
 
 func listRun(cmd *cobra.Command, args []string) {
-	items, err := todo.ReadItems(datafile)
+	var datafileName string = *todo.AllConstants.DataFileName
+
+	items, err := todo.ReadItems(viper.GetString(datafileName))
 
 	if err != nil {
 		log.Fatal(err)
@@ -40,11 +43,7 @@ func listRun(cmd *cobra.Command, args []string) {
 
 	sort.Sort(todo.ByPriority(items))
 
-	// fmt.Println(items)
-
 	writer := tabwriter.NewWriter(os.Stdout, 3, 0, 1, ' ', 0)
-
-	// fmt.Println(doneOpt, allOpt)
 
 	for _, item := range items {
 		if allOpt || item.Done == doneOpt {

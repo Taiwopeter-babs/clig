@@ -8,7 +8,8 @@ import (
 )
 
 type TodoConstants struct {
-	Filename *string
+	Filename     *string
+	DataFileName *string
 }
 
 var (
@@ -22,9 +23,11 @@ func init() {
 	}
 
 	todoFile := home + string(os.PathSeparator) + "clig-todos.json"
+	datafileName := "datafile"
 
 	AllConstants = &TodoConstants{
-		Filename: &todoFile,
+		Filename:     &todoFile,
+		DataFileName: &datafileName,
 	}
 
 }
