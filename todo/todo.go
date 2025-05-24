@@ -61,10 +61,10 @@ func SaveItems(filename string, items []Item) error {
 // Read Todo items from the file. If the files does not exist
 // an error will be returned with an empty Item list
 func ReadItems(filename string) ([]Item, error) {
+	fmt.Println(filename)
 	data, err := os.ReadFile(filename)
 
 	if err != nil {
-		fmt.Println(err)
 		return []Item{}, err
 	}
 

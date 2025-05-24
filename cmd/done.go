@@ -23,9 +23,10 @@ var doneCmd = &cobra.Command{
 }
 
 func doneRun(cmd *cobra.Command, args []string) {
-	var datafileName string = *todo.AllConstants.DataFileName
 
-	items, err := todo.ReadItems(viper.GetString(datafileName))
+	var configDataFileName = *todo.AllConstants.ConfigDataFileName
+
+	items, err := todo.ReadItems(viper.GetString(configDataFileName))
 
 	if err != nil {
 		log.Fatalln(err)

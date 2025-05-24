@@ -25,13 +25,9 @@ var addCmd = &cobra.Command{
 func addRun(cmd *cobra.Command, args []string) {
 	var err error
 
-	var datafileName string = *todo.AllConstants.DataFileName
+	var configDataFileName = *todo.AllConstants.ConfigDataFileName
 
-	items, _ := todo.ReadItems(viper.GetString(datafileName))
-
-	// if err != nil {
-	// 	fmt.Println(err)
-	// }
+	items, _ := todo.ReadItems(viper.GetString(configDataFileName))
 
 	for _, val := range args {
 		item := todo.Item{Text: val}
@@ -39,7 +35,7 @@ func addRun(cmd *cobra.Command, args []string) {
 		items = append(items, item)
 	}
 
-	err = todo.SaveItems(viper.GetString(datafileName), items)
+	err = todo.SaveItems(viper.GetString(configDataFileName), items)
 
 	if err != nil {
 		return

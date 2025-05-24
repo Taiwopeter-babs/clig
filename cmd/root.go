@@ -15,6 +15,8 @@ import (
 const (
 	configName string = ".clig"
 	configPath string = "$HOME"
+	// This prefixes the environment variable set for the app - CLIG_DATAFILE=value
+	configEnvVarPrefix = "clig"
 )
 
 var (
@@ -26,7 +28,7 @@ var (
 		Long:  `Clig will help you get more done in less time`,
 	}
 
-	datafile string
+	dataFile string
 	cfgFile  string
 )
 
@@ -44,20 +46,18 @@ func initConfig() {
 	viper.SetConfigName(configName)
 	viper.AddConfigPath(configPath)
 	viper.AutomaticEnv()
+	viper.SetEnvPrefix(configEnvVarPrefix)
 
-	if err := viper.ReadInConfig(); err != nil {
+	if err := viper.ReadInConfig(); err == nil {
 		fmt.Println("Using Config file: ", viper.ConfigFileUsed())
 	}
 }
 
 func init() {
 	cobra.OnInitialize(initConfig)
-	// Here you will define your flags and configuration settings.
-	// Cobra supports persistent flags, which, if defined here,
-	// will be global for your application.
 
 	rootCmd.PersistentFlags().StringVar(
-		&datafile,
+		&dataFile,
 		"datafile",
 		*todo.AllConstants.Filename,
 		"datafile to store todos",
